@@ -12,3 +12,10 @@ First, I copied the firmware code for Arduino platform from that page, then I he
 4. In algorithm.h the "uint8_t uch_spo2_table[184]" has been replaced by "float uch_spo2_table[184]", where the original integers have been recalculated into floating point numbers with 6 decimal digits precision.
 5. A completely new algorithm of signal processing and resulting heart rate and SpO2 calculation has been designed and placed in new files algorithm_by_RF.h and algorithm_by_RF.cpp. The algorithm has been described and published in the following Instructable: ().
 6. The RD117_ARDUINO.ino file has been rewritten from the ground up. Code for saving oximetry data to an SD card has been added, algorithm_by_RF has been made default, while Maxim's algorithm has been made optional. Integer variables were replaced by floating point variables, where applicable.
+
+The following two crucial constants are defined in algorithm_by_RF.h:
+
+const float min_autocorrelation_ratio;
+const float min_pearson_correlation;
+
+Values of these constants determine the severity of quality filter applied to raw signals emitted by MAX30102. Generally, the higher their values, the more strict the filter will be. Details can be found in this project's Instructable.
