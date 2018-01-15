@@ -36,7 +36,7 @@
 #include "max30102.h"
 
 //#define DEBUG // Uncomment for debug output to the Serial stream
-#define TEST_MAXIM_ALGORITHM // Uncomment if you want to include results returned by the original MAXIM algorithm
+//#define TEST_MAXIM_ALGORITHM // Uncomment if you want to include results returned by the original MAXIM algorithm
 //#define SAVE_RAW_DATA // Uncomment if you want raw data coming out of the sensor saved to SD card. Red signal first, IR second.
 
 #ifdef TEST_MAXIM_ALGORITHM
@@ -137,9 +137,9 @@ void setup() {
   dataFile.println(measuredvbat);
   dataFile.println(my_status);
 #ifdef TEST_MAXIM_ALGORITHM
-  dataFile.print(F("Time\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr"));
+  dataFile.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr"));
 #else
-  dataFile.print(F("Time\tSpO2\tHR\tClock\tRatio\tCorr"));
+  dataFile.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr"));
 #endif
 #ifdef SAVE_RAW_DATA
   int8_t i;
@@ -186,7 +186,8 @@ void loop() {
   //calculate heart rate and SpO2 after 100 samples (4 seconds of samples) using Robert's method
   rf_heart_rate_and_oxygen_saturation(aun_ir_buffer, BUFFER_SIZE, aun_red_buffer, &n_spo2, &ch_spo2_valid, &n_heart_rate, &ch_hr_valid, &ratio, &correl); 
   elapsedTime=millis()-timeStart;
-  millis_to_hours(elapsedTime,hr_str);
+  millis_to_hours(elapsedTime,hr_str); // Time in hh:mm:ss format
+  elapsedTime/=1000; // Time in seconds
 
 #ifdef DEBUG
   Serial.println("--RF--");
