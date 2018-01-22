@@ -237,6 +237,7 @@ float rf_Pcorrelation(float *pn_x, float *pn_y, int32_t n_size)
   for (i=0,x_ptr=pn_x,y_ptr=pn_y; i<n_size; ++i,++x_ptr,++y_ptr) {
     r+=(*x_ptr)*(*y_ptr);
   }
+  r/=n_size;
   return r;
 }
 
