@@ -93,7 +93,7 @@ void rf_heart_rate_and_oxygen_saturation(uint32_t *pun_ir_buffer, int32_t n_ir_b
   if(*correl>=min_pearson_correlation) {
     // RF, If correlation os good, then find average periodicity of the IR signal. If aperiodic, return periodicity of 0
     rf_signal_periodicity(an_x, BUFFER_SIZE, &n_last_peak_interval, LOWEST_PERIOD, HIGHEST_PERIOD, min_autocorrelation_ratio, f_ir_sumsq, ratio);
-  } else n_last_peak_interval==0;
+  } else n_last_peak_interval=0;
   if(n_last_peak_interval!=0) {
     *pn_heart_rate = (int32_t)(FS60/n_last_peak_interval);
     *pch_hr_valid  = 1;
