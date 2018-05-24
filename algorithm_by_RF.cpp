@@ -53,7 +53,7 @@ void rf_heart_rate_and_oxygen_saturation(uint32_t *pun_ir_buffer, int32_t n_ir_b
 */
 {
   int32_t k;  
-  static int32_t n_last_peak_interval=FS; // Initialize it to 25, which corresponds to heart rate of 60 bps, RF
+  static int32_t n_last_peak_interval=INIT_INTERVAL;
   float f_ir_mean,f_red_mean,f_ir_sumsq,f_red_sumsq;
   float f_y_ac, f_x_ac, xy_ratio;
   float beta_ir, beta_red, x;

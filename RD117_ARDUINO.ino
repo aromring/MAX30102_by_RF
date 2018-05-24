@@ -142,7 +142,7 @@ void setup() {
   dataFile.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr"));
 #endif
 #ifdef SAVE_RAW_DATA
-  int8_t i;
+  int32_t i;
   // These are headers for the red signal
   for(i=0;i<BUFFER_SIZE;++i) {
     dataFile.print("\t");
@@ -158,17 +158,17 @@ void setup() {
   timeStart=millis();
 }
 
-//Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every 4 seconds
+//Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every ST seconds
 void loop() {
   float n_spo2,ratio,correl;  //SPO2 value
   int8_t ch_spo2_valid;  //indicator to show if the SPO2 calculation is valid
   int32_t n_heart_rate; //heart rate value
   int8_t  ch_hr_valid;  //indicator to show if the heart rate calculation is valid
-  int8_t i;
+  int32_t i;
   char hr_str[10];
      
-  //buffer length of 100 stores 4 seconds of samples running at 25sps
-  //read 100 samples, and determine the signal range
+  //buffer length of BUFFER_SIZE stores ST seconds of samples running at FS sps
+  //read BUFFER_SIZE samples, and determine the signal range
   for(i=0;i<BUFFER_SIZE;i++)
   {
     while(digitalRead(oxiInt)==1);  //wait until the interrupt pin asserts
@@ -183,7 +183,7 @@ void loop() {
 #endif
   }
 
-  //calculate heart rate and SpO2 after 100 samples (4 seconds of samples) using Robert's method
+  //calculate heart rate and SpO2 after BUFFER_SIZE samples (ST seconds of samples) using Robert's method
   rf_heart_rate_and_oxygen_saturation(aun_ir_buffer, BUFFER_SIZE, aun_red_buffer, &n_spo2, &ch_spo2_valid, &n_heart_rate, &ch_hr_valid, &ratio, &correl); 
   elapsedTime=millis()-timeStart;
   millis_to_hours(elapsedTime,hr_str); // Time in hh:mm:ss format
@@ -202,7 +202,7 @@ void loop() {
 #endif
 
 #ifdef TEST_MAXIM_ALGORITHM
-  //calculate heart rate and SpO2 after 100 samples (4 seconds of samples) using MAXIM's method
+  //calculate heart rate and SpO2 after BUFFER_SIZE samples (ST seconds of samples) using MAXIM's method
   float n_spo2_maxim;  //SPO2 value
   int8_t ch_spo2_valid_maxim;  //indicator to show if the SPO2 calculation is valid
   int32_t n_heart_rate_maxim; //heart rate value
