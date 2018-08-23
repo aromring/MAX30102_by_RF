@@ -19,3 +19,5 @@ const float min_autocorrelation_ratio;
 const float min_pearson_correlation;
 
 Values of these constants determine the severity of quality filter applied to raw signals emitted by MAX30102. Generally, the higher their values, the more strict the filter will be. Details can be found in this project's Instructable.
+
+The RD117_ARDUINO.ino contains several defines that will enable/disable debug printing, testing of the original MAXIM algorithm, saving raw data, and most importantly whether or not you use Adafruit Feather M0 Adalogger as your MCU. Disable the latter option if you want to use an alternative microcontroller. But I have to give you a fair warning: Feather M0's features an ATSAMD21G18 ARM Cortex M0 processor, clocked at 48 MHz and with a whopping 256K of FLASH (8x more than the Atmega328 or 32u4) and 32K of RAM (16x as much). As such, it can handle this code without a drop of sweat. Lesser MCUs may have serious problems with it, especially in terms of sufficient memory.
