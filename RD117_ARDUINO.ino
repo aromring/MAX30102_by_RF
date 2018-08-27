@@ -177,6 +177,25 @@ void setup() {
     delay(1000);
   }
   uch_dummy=Serial.read();
+#ifdef TEST_MAXIM_ALGORITHM
+  Serial.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr"));
+#else // TEST_MAXIM_ALGORITHM
+  Serial.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr"));
+#endif // TEST_MAXIM_ALGORITHM
+#ifdef SAVE_RAW_DATA
+  int32_t i;
+  // These are headers for the red signal
+  for(i=0;i<BUFFER_SIZE;++i) {
+    Serial.print("\t");
+    Serial.print(i);
+  }
+  // These are headers for the infrared signal
+  for(i=0;i<BUFFER_SIZE;++i) {
+    Serial.print("\t");
+    Serial.print(i);
+  }
+#endif // SAVE_RAW_DATA
+  Serial.println("");
   
 #endif // USE_ADALOGGER
   
