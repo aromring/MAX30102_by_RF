@@ -21,3 +21,14 @@ const float min_pearson_correlation;
 Values of these constants determine the severity of quality filter applied to raw signals emitted by MAX30102. Generally, the higher their values, the more strict the filter will be. Details can be found in this project's Instructable.
 
 The RD117_ARDUINO.ino contains several defines that will enable/disable debug printing, testing of the original MAXIM algorithm, saving raw data, and most importantly whether or not you use Adafruit Feather M0 Adalogger as your MCU. Disable the latter option if you want to use an alternative microcontroller. But I have to give you a fair warning: Feather M0's features an ATSAMD21G18 ARM Cortex M0 processor, clocked at 48 MHz and with a whopping 256K of FLASH (8x more than the Atmega328 or 32u4) and 32K of RAM (16x as much). As such, it can handle this code without a drop of sweat. Lesser MCUs may have serious problems with it, especially in terms of sufficient memory.
+
+HOW TO REPORT BUGS
+
+Since I am not a psychic, all inquiries containing some form of vague "your code does not work" and no useful information at all will invariably be referred to this section of the README file. I am sorry, but I have honestly tried being helpful to quite a number of people contacting me either through GitHub or Instructables mail - and in each case I had to waste entire days of e-mail exchanges until I had at least a minimum of useful information and data. Hence, I will welcome a software bug report, but I will not be able to help you with the following issues:
+
+1) Underpowered MCU (see previous paragraphs).
+2) Misunderstanding of oximetry, especially motion artifacts. Don't expect a useful signal when the sensor is moving. Don't expect a useful signal from the very first batch, it may take some time - say, a minute - for the whole system to get going.
+3) Faulty hardware.
+4) Incorrect connections.
+
+At minimum, in order to accept a bug report I need you to obtain at least one batch of the _raw_ data coming from the MAX30102 sensor, both red and IR channels, preferably as two columns of 100 numbers. Turn #DEBUG directive on in RD117_ARDUINO.ino to get raw data in the Serial Monitor. First, _plot_ the data on your end making sure that the resulting graph matches examples of _good_ signal in this project's Instructable. If not, then don't expect a bad signal to produce correct results! If the signal is of good quality, but the code still refuses to cooperate, then send the data to me, but please don't use Instructables mail for this purpose (data always comes truncated)! Preferably, open a new issue in this GitHub repository and paste the data there. Thank you.
