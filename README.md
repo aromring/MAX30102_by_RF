@@ -31,4 +31,12 @@ Since I am not a psychic, all inquiries containing some form of vague "your code
 3) Faulty hardware.
 4) Incorrect connections.
 
-At minimum, in order to accept a bug report I need you to obtain at least one batch of the _RAW_ _DATA_ coming from the MAX30102 sensor, both red and IR channels, preferably as two columns of 100 numbers. Turn #DEBUG or #SAVE_RAW_DATA directive on in RD117_ARDUINO.ino to get raw data in the Serial Monitor. First, _plot_ the data on your end making sure that the resulting graph matches examples of _good_ signal in this project's Instructable. If not, then don't expect a bad signal to produce correct results! If the signal is of good quality, but the code still refuses to cooperate, then send the data to me, but please don't use Instructables mail for this purpose (data always comes truncated)! Preferably, open a new issue in this GitHub repository and paste the data there. Thank you.
+At minimum, in order to accept a bug report I need you to:
+
+A. Obtain at least one batch of the _RAW_ _DATA_ coming from the MAX30102 sensor, both red and IR channels, preferably as two columns of 100 numbers. Turn #DEBUG or #SAVE_RAW_DATA directive on in RD117_ARDUINO.ino to get raw data in the Serial Monitor.
+
+B. _Plot_ the data on your end making sure that the resulting graph matches examples of _good_ signal in this project's Instructable. If not, then don't expect a bad signal to produce correct results! 
+
+C. If the signal is of good quality, but the code still refuses to cooperate, then send the data to me, but please don't use Instructables mail for this purpose (data always comes truncated)! Preferably, open a new issue in this GitHub repository and paste the data there. 
+
+Thank you.
