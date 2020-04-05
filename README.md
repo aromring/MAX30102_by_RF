@@ -28,7 +28,7 @@ Since I am not a psychic, all inquiries containing some form of vague "your code
 
 1) Underpowered MCU (see previous paragraphs).
 2) Misunderstanding of oximetry, especially motion artifacts. Don't expect a useful signal when the sensor is moving. Don't expect a useful signal from the very first batch, it may take some time - say, a minute - for the whole system to get going.
-3) Faulty hardware.
+3) Faulty hardware (see https://reedpaper.wordpress.com/2018/08/22/pulse-oximeter-max30100-max30102-how-to-fix-wrong-board/, for example).
 4) Incorrect connections.
 
 At minimum, in order to accept a bug report I need you to:
