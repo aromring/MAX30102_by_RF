@@ -98,7 +98,7 @@ void rf_heart_rate_and_oxygen_saturation(uint32_t *pun_ir_buffer, int32_t n_ir_b
     *pn_heart_rate = (int32_t)(FS60/n_last_peak_interval);
     *pch_hr_valid  = 1;
   } else {
-    n_last_peak_interval=FS;
+    n_last_peak_interval=INIT_INTERVAL;
     *pn_heart_rate = -999; // unable to calculate because signal looks aperiodic
     *pch_hr_valid  = 0;
     *pn_spo2 =  -999 ; // do not use SPO2 from this corrupt signal
