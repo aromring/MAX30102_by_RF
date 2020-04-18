@@ -40,3 +40,4 @@ B. _Plot_ the data on your end making sure that the resulting graph matches exam
 C. If the signal is of good quality, but the code still refuses to cooperate, then send the data to me, but please don't use Instructables mail for this purpose (data always comes truncated)! Preferably, open a new issue in this GitHub repository and paste the data there. 
 
 Thank you.
+P.S. For an example of an excellent bug report look at Rob Cazzaro's post: https://github.com/aromring/MAX30102_by_RF/issues/13#issue-601473302
