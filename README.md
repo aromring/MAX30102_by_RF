@@ -28,7 +28,7 @@ Since I am not a psychic, all inquiries containing some form of vague "your code
 
 1) Underpowered MCU (see previous paragraphs).
 2) Misunderstanding of oximetry, especially motion artifacts. Don't expect a useful signal when the sensor is moving. Don't expect a useful signal from the very first batch, it may take some time - say, a minute - for the whole system to get going.
-3) Faulty hardware (see https://reedpaper.wordpress.com/2018/08/22/pulse-oximeter-max30100-max30102-how-to-fix-wrong-board/, for example).
+3) Faulty hardware (see https://reedpaper.wordpress.com/2018/08/22/pulse-oximeter-max30100-max30102-how-to-fix-wrong-board/, for example). Some cloned sensors may have the RED and IR channels swapped; see Rob Cazzaro's post: https://github.com/aromring/MAX30102_by_RF/issues/13#issue-601473302 (his is a prime example of an excellent bug report, by the way).
 4) Incorrect connections.
 
 At minimum, in order to accept a bug report I need you to:
@@ -40,4 +40,3 @@ B. _Plot_ the data on your end making sure that the resulting graph matches exam
 C. If the signal is of good quality, but the code still refuses to cooperate, then send the data to me, but please don't use Instructables mail for this purpose (data always comes truncated)! Preferably, open a new issue in this GitHub repository and paste the data there. 
 
 Thank you.
-P.S. For an example of an excellent bug report look at Rob Cazzaro's post: https://github.com/aromring/MAX30102_by_RF/issues/13#issue-601473302
