@@ -30,13 +30,12 @@
 * ------------------------------------------------------------------------- */
 
 #include <Arduino.h>
-#include <Wire.h>
 #include <SPI.h>
 #include "algorithm_by_RF.h"
 #include "max30102.h"
 
 //#define DEBUG // Uncomment for debug output to the Serial stream
-#define USE_ADALOGGER // Comment out if you don't have ADALOGGER itself but your MCU still can handle this code
+//#define USE_ADALOGGER // Comment out if you don't have ADALOGGER itself but your MCU still can handle this code
 //#define TEST_MAXIM_ALGORITHM // Uncomment if you want to include results returned by the original MAXIM algorithm
 //#define SAVE_RAW_DATA // Uncomment if you want raw data coming out of the sensor saved to SD card. Red signal first, IR second.
 
@@ -82,17 +81,11 @@ void setup() {
   digitalWrite(sdIndicatorPin,LOW);
 #endif
 
-  Wire.begin();
-
 #if defined(DEBUG) || !defined(USE_ADALOGGER)
   // initialize serial communication at 115200 bits per second:
   Serial.begin(115200);
 #endif
 
-  maxim_max30102_reset(); //resets the MAX30102
-  delay(1000);
-
-  maxim_max30102_read_reg(REG_INTR_STATUS_1,&uch_dummy);  //Reads/clears the interrupt status register
   maxim_max30102_init();  //initialize the MAX30102
   old_n_spo2=0.0;
 
@@ -150,9 +143,9 @@ void setup() {
   dataFile.println(measuredvbat);
   dataFile.println(my_status);
 #ifdef TEST_MAXIM_ALGORITHM
-  dataFile.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr"));
+  dataFile.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr\tTemp[C]”));
 #else // TEST_MAXIM_ALGORITHM
-  dataFile.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr"));
+  dataFile.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr\tTemp[C]"));
 #endif // TEST_MAXIM_ALGORITHM
 #ifdef SAVE_RAW_DATA
   int32_t i;
@@ -178,9 +171,9 @@ void setup() {
   }
   uch_dummy=Serial.read();
 #ifdef TEST_MAXIM_ALGORITHM
-  Serial.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr"));
+  Serial.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr\tTemp[C]"));
 #else // TEST_MAXIM_ALGORITHM
-  Serial.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr"));
+  Serial.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr\tTemp[C]"));
 #endif // TEST_MAXIM_ALGORITHM
 #ifdef SAVE_RAW_DATA
   int32_t i;
@@ -233,6 +226,12 @@ void loop() {
   millis_to_hours(elapsedTime,hr_str); // Time in hh:mm:ss format
   elapsedTime/=1000; // Time in seconds
 
+  // Read the _chip_ temperature in degrees Celsius
+  int8_t integer_temperature;
+  uint8_t fractional_temperature;
+  maxim_max30102_read_temperature(&integer_temperature, &fractional_temperature);
+  float temperature = integer_temperature + ((float)fractional_temperature)/16.0;
+
 #ifdef DEBUG
   Serial.println("--RF--");
   Serial.print(elapsedTime);
@@ -241,7 +240,9 @@ void loop() {
   Serial.print("\t");
   Serial.print(n_heart_rate, DEC);
   Serial.print("\t");
-  Serial.println(hr_str);
+  Serial.print(hr_str);
+  Serial.print("\t");
+  Serial.println(temperature);
   Serial.println("------");
 #endif // DEBUG
 
@@ -290,6 +291,8 @@ void loop() {
     dataFile.print(ratio);
     dataFile.print("\t");
     dataFile.print(correl);
+    dataFile.print("\t");
+    dataFile.print(temperature);
 #ifdef SAVE_RAW_DATA
     // Save raw data for unusual O2 levels
     for(i=0;i<BUFFER_SIZE;++i)
@@ -331,6 +334,8 @@ void loop() {
     Serial.print(ratio);
     Serial.print("\t");
     Serial.print(correl);
+    Serial.print("\t");
+    Serial.print(temperature);
 #ifdef SAVE_RAW_DATA
     // Save raw data for unusual O2 levels
     for(i=0;i<BUFFER_SIZE;++i)
@@ -393,4 +398,3 @@ void blinkLED(const byte led, bool isOK)
   }
 }
 #endif
-

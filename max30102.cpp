@@ -117,6 +117,14 @@ bool maxim_max30102_init()
 */
 {
   Wire.begin();
+  Wire.setClock(400000L); 
+  
+  maxim_max30102_reset(); //resets the MAX30102
+  delay(1000);
+
+  uint8_t uch_dummy;
+  maxim_max30102_read_reg(REG_INTR_STATUS_1,&uch_dummy);  //Reads/clears the interrupt status register
+
   if(!maxim_max30102_write_reg(REG_INTR_ENABLE_1,0xc0)) // INTR setting
     return false;
   if(!maxim_max30102_write_reg(REG_INTR_ENABLE_2,0x00))
@@ -211,3 +219,14 @@ bool maxim_max30102_reset()
         return true;    
 }
 
+bool maxim_max30102_read_temperature(int8_t *integer_part, uint8_t *fractional_part)
+{
+  maxim_max30102_write_reg(REG_TEMP_CONFIG,0x1); // Enabling TEMP_EN
+  delayMicroseconds(1); // Let the processor do its work
+  // For proper conversion, read the integer part as uint8_t
+  uint8_t temp;
+  maxim_max30102_read_reg(REG_TEMP_INTR, &temp); // 2's complement integer part of the temperature in degrees Celsius
+  *integer_part = temp;
+  maxim_max30102_read_reg(REG_TEMP_FRAC, fractional_part); // Fractional part of the temperature in 1/16-th degree Celsius
+  return true;
+}
