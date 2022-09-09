@@ -63,8 +63,8 @@ const byte oxiInt = 10; // pin connected to MAX30102 INT
 
 uint32_t elapsedTime,timeStart;
 
-float aun_ir_buffer[BUFFER_SIZE]; //infrared LED sensor data
-float aun_red_buffer[BUFFER_SIZE];  //red LED sensor data
+uint32_t aun_ir_buffer[BUFFER_SIZE]; //infrared LED sensor data
+uint32_t aun_red_buffer[BUFFER_SIZE];  //red LED sensor data
 float old_n_spo2;  // Previous SPO2 value
 uint8_t uch_dummy,k;
 
@@ -143,7 +143,7 @@ void setup() {
   dataFile.println(measuredvbat);
   dataFile.println(my_status);
 #ifdef TEST_MAXIM_ALGORITHM
-  dataFile.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr\tTemp[C]"));
+  dataFile.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr\tTemp[C]”));
 #else // TEST_MAXIM_ALGORITHM
   dataFile.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr\tTemp[C]"));
 #endif // TEST_MAXIM_ALGORITHM

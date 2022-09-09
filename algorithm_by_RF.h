@@ -69,7 +69,7 @@ const int32_t LOWEST_PERIOD = FS60/MAX_HR; // Minimal distance between peaks
 const int32_t HIGHEST_PERIOD = FS60/MIN_HR; // Maximal distance between peaks
 const float mean_X = (float)(BUFFER_SIZE-1)/2.0; // Mean value of the set of integers from 0 to BUFFER_SIZE-1. For ST=4 and FS=25 it's equal to 49.5.
 
-void rf_heart_rate_and_oxygen_saturation(float *pun_ir_buffer, int32_t n_ir_buffer_length, float *pun_red_buffer, float *pn_spo2, int8_t *pch_spo2_valid, int32_t *pn_heart_rate, 
+void rf_heart_rate_and_oxygen_saturation(uint32_t *pun_ir_buffer, int32_t n_ir_buffer_length, uint32_t *pun_red_buffer, float *pn_spo2, int8_t *pch_spo2_valid, int32_t *pn_heart_rate, 
                                         int8_t *pch_hr_valid, float *ratio, float *correl);
 float rf_linear_regression_beta(float *pn_x, float xmean, float sum_x2);
 float rf_autocorrelation(float *pn_x, int32_t n_size, int32_t n_lag);
@@ -79,3 +79,4 @@ void rf_initialize_periodicity_search(float *pn_x, int32_t n_size, int32_t *p_la
 void rf_signal_periodicity(float *pn_x, int32_t n_size, int32_t *p_last_periodicity, int32_t n_min_distance, int32_t n_max_distance, float min_aut_ratio, float aut_lag0, float *ratio);
 
 #endif /* ALGORITHM_BY_RF_H_ */
+
