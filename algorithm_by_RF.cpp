@@ -34,7 +34,7 @@
 #include "algorithm_by_RF.h"
 #include <math.h>
 
-void rf_heart_rate_and_oxygen_saturation(float *pun_ir_buffer, int32_t n_ir_buffer_length, float *pun_red_buffer, float *pn_spo2, int8_t *pch_spo2_valid, 
+void rf_heart_rate_and_oxygen_saturation(uint32_t *pun_ir_buffer, int32_t n_ir_buffer_length, uint32_t *pun_red_buffer, float *pn_spo2, int8_t *pch_spo2_valid, 
                 int32_t *pn_heart_rate, int8_t *pch_hr_valid, float *ratio, float *correl)
 /**
 * \brief        Calculate the heart rate and SpO2 level, Robert Fraczkiewicz version
@@ -57,7 +57,9 @@ void rf_heart_rate_and_oxygen_saturation(float *pun_ir_buffer, int32_t n_ir_buff
   float f_ir_mean,f_red_mean,f_ir_sumsq,f_red_sumsq;
   float f_y_ac, f_x_ac, xy_ratio;
   float beta_ir, beta_red, x;
-  
+  float an_x[BUFFER_SIZE], *ptr_x; //ir
+  float an_y[BUFFER_SIZE], *ptr_y; //red
+
   // calculates DC mean and subtracts DC from ir and red
   f_ir_mean=0.0; 
   f_red_mean=0.0;
@@ -69,36 +71,35 @@ void rf_heart_rate_and_oxygen_saturation(float *pun_ir_buffer, int32_t n_ir_buff
   f_red_mean=f_red_mean/n_ir_buffer_length ;
   
   // remove DC 
-  for (k=0; k<n_ir_buffer_length; ++k) {
-    pun_ir_buffer[k] -= f_ir_mean;
-    pun_red_buffer[k] -= f_red_mean;
+  for (k=0,ptr_x=an_x,ptr_y=an_y; k<n_ir_buffer_length; ++k,++ptr_x,++ptr_y) {
+    *ptr_x = pun_ir_buffer[k] - f_ir_mean;
+    *ptr_y = pun_red_buffer[k] - f_red_mean;
   }
 
   // RF, remove linear trend (baseline leveling)
-  beta_ir = rf_linear_regression_beta(pun_ir_buffer, mean_X, sum_X2);
-  beta_red = rf_linear_regression_beta(pun_red_buffer, mean_X, sum_X2);
-  for(k=0,x=-mean_X; k<n_ir_buffer_length; ++k,++x) {
-    pun_ir_buffer[k] -= beta_ir*x;
-    pun_red_buffer[k] -= beta_red*x;
+  beta_ir = rf_linear_regression_beta(an_x, mean_X, sum_X2);
+  beta_red = rf_linear_regression_beta(an_y, mean_X, sum_X2);
+  for(k=0,x=-mean_X,ptr_x=an_x,ptr_y=an_y; k<n_ir_buffer_length; ++k,++x,++ptr_x,++ptr_y) {
+    *ptr_x -= beta_ir*x;
+    *ptr_y -= beta_red*x;
   }
   
     // For SpO2 calculate RMS of both AC signals. In addition, pulse detector needs raw sum of squares for IR
-  f_x_ac=rf_rms(pun_ir_buffer,n_ir_buffer_length,&f_ir_sumsq);
-
-  f_y_ac=rf_rms(pun_red_buffer,n_ir_buffer_length,&f_red_sumsq);
+  f_y_ac=rf_rms(an_y,n_ir_buffer_length,&f_red_sumsq);
+  f_x_ac=rf_rms(an_x,n_ir_buffer_length,&f_ir_sumsq);
 
   // Calculate Pearson correlation between red and IR
-  *correl=rf_Pcorrelation(pun_ir_buffer, pun_red_buffer, n_ir_buffer_length)/sqrt(f_red_sumsq*f_ir_sumsq);
+  *correl=rf_Pcorrelation(an_x, an_y, n_ir_buffer_length)/sqrt(f_red_sumsq*f_ir_sumsq);
 
   // Find signal periodicity
   if(*correl>=min_pearson_correlation) {
     // At the beginning of oximetry run the exact range of heart rate is unknown. This may lead to wrong rate if the next call does not find the _first_
     // peak of the autocorrelation function. E.g., second peak would yield only 50% of the true rate. 
     if(LOWEST_PERIOD==n_last_peak_interval) 
-      rf_initialize_periodicity_search(pun_ir_buffer, BUFFER_SIZE, &n_last_peak_interval, HIGHEST_PERIOD, min_autocorrelation_ratio, f_ir_sumsq);
+      rf_initialize_periodicity_search(an_x, BUFFER_SIZE, &n_last_peak_interval, HIGHEST_PERIOD, min_autocorrelation_ratio, f_ir_sumsq);
     // RF, If correlation os good, then find average periodicity of the IR signal. If aperiodic, return periodicity of 0
     if(n_last_peak_interval!=0)
-      rf_signal_periodicity(pun_ir_buffer, BUFFER_SIZE, &n_last_peak_interval, LOWEST_PERIOD, HIGHEST_PERIOD, min_autocorrelation_ratio, f_ir_sumsq, ratio);
+      rf_signal_periodicity(an_x, BUFFER_SIZE, &n_last_peak_interval, LOWEST_PERIOD, HIGHEST_PERIOD, min_autocorrelation_ratio, f_ir_sumsq, ratio);
   } else n_last_peak_interval=0;
 
   // Calculate heart rate if periodicity detector was successful. Otherwise, reset peak interval to its initial value and report error.
@@ -298,3 +299,4 @@ float rf_Pcorrelation(float *pn_x, float *pn_y, int32_t n_size)
   r/=n_size;
   return r;
 }
+
