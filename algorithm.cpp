@@ -58,7 +58,7 @@
 */
 
 #include "algorithm.h"
-#include "arduino.h"
+#include "Arduino.h"
 
 //#if defined(ARDUINO_AVR_UNO)
 //Arduino Uno doesn't have enough SRAM to store 100 samples of IR led data and red led data in 32-bit format
