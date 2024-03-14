@@ -33,7 +33,7 @@
 */
 #ifndef ALGORITHM_BY_RF_H_
 #define ALGORITHM_BY_RF_H_
-#include <arduino.h>
+#include <Arduino.h>
 
 /*
  * Settable parameters 
