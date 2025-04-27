@@ -124,7 +124,6 @@ void setup() {
   }
   
 #ifdef DEBUG
-  delay(3000);
   while(Serial.available()==0)  //wait until user presses a key
   {
     Serial.print(F("Vbatt=\t"));
