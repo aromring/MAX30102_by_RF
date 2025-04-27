@@ -87,10 +87,10 @@ void maxim_heart_rate_and_oxygen_saturation(uint32_t *pun_ir_buffer, int32_t n_i
 * \retval       None
 */
 {
-  uint32_t un_ir_mean,un_only_once ;
+  uint32_t un_ir_mean;
   int32_t k, n_i_ratio_count;
-  int32_t i, s, m, n_exact_ir_valley_locs_count, n_middle_idx;
-  int32_t n_th1, n_npks, n_c_min;   
+  int32_t i, n_exact_ir_valley_locs_count, n_middle_idx;
+  int32_t n_th1, n_npks;   
   int32_t an_ir_valley_locs[15] ;
   int32_t n_peak_interval_sum;
   static int32_t n_last_peak_interval=FS; // Initialize it to 25, which corresponds to heart rate of 60 bps, RF
@@ -101,8 +101,8 @@ void maxim_heart_rate_and_oxygen_saturation(uint32_t *pun_ir_buffer, int32_t n_i
   int32_t n_y_dc_max_idx, n_x_dc_max_idx; 
   int32_t an_ratio[5], n_ratio_average; 
   int32_t n_nume, n_denom ;
-  int32_t an_x[ BUFFER_SIZE]; //ir
-  int32_t an_y[ BUFFER_SIZE]; //red
+  int32_t an_x[BUFFER_SIZE]; //ir
+  int32_t an_y[BUFFER_SIZE]; //red
 
   // calculates DC mean and subtracts DC from ir
   un_ir_mean =0; 
