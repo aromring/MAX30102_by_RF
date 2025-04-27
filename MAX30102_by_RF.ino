@@ -124,6 +124,7 @@ void setup() {
   }
   
 #ifdef DEBUG
+  delay(3000);
   while(Serial.available()==0)  //wait until user presses a key
   {
     Serial.print(F("Vbatt=\t"));
@@ -143,7 +144,7 @@ void setup() {
   dataFile.println(measuredvbat);
   dataFile.println(my_status);
 #ifdef TEST_MAXIM_ALGORITHM
-  dataFile.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr\tTemp[C]”));
+  dataFile.print(F("Time[s]\tSpO2\tHR\tSpO2_MX\tHR_MX\tClock\tRatio\tCorr\tTemp[C]"));
 #else // TEST_MAXIM_ALGORITHM
   dataFile.print(F("Time[s]\tSpO2\tHR\tClock\tRatio\tCorr\tTemp[C]"));
 #endif // TEST_MAXIM_ALGORITHM
